@@ -3,8 +3,9 @@ set -e
 
 DEPLOY_DIR="/var/www/vasnumero/rumble_Gaming_IQA"
 REPO_URL="https://github.com/akashzeen-art/rumble-gaming-iraq.git"
+DOMAIN="rumble.globalonegaming.com"
 
-echo "Deploying Rumble Gaming IQA..."
+echo "Deploying Rumble Gaming IQA -> ${DOMAIN}"
 
 if [ ! -d "$DEPLOY_DIR/.git" ]; then
   echo "Cloning repository..."
@@ -27,6 +28,14 @@ npm install --prefer-online
 echo "Building production bundle..."
 npm run build
 
+if [ -f "setup-nginx.sh" ]; then
+  echo "Updating nginx config..."
+  chmod +x setup-nginx.sh
+  ./setup-nginx.sh
+fi
+
+echo ""
 echo "Deployment complete."
-echo "Serve the dist/ folder from your web server (nginx/apache)."
+echo "  Site:  http://${DOMAIN}"
+echo "  Files: ${DEPLOY_DIR}/dist"
 ls -la dist/
