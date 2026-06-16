@@ -17,8 +17,12 @@ cd "$DEPLOY_DIR"
 echo "Pulling latest from GitHub..."
 git pull origin main
 
+echo "Cleaning npm cache and old modules..."
+npm cache clean --force
+rm -rf node_modules
+
 echo "Installing dependencies..."
-npm install
+npm install --prefer-online
 
 echo "Building production bundle..."
 npm run build
