@@ -86,7 +86,8 @@ export function AuthProvider({ children }) {
   }, [subid, productcode, setMsisdn]);
 
   const redirectToCampaign = useCallback(() => {
-    window.location.href = getCampaignUrl(subid, productcode);
+    const id = subid || '0';
+    window.location.href = getCampaignUrl(id, productcode);
   }, [subid, productcode]);
 
   const unsubscribe = useCallback(async () => {
