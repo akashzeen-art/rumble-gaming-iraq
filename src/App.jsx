@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import './index.css';
-import t from './i18n/ar';
 import Navbar              from './components/Navbar';
 import Footer              from './components/Footer';
 import SubscriptionGuard   from './components/SubscriptionGuard';
@@ -19,10 +18,6 @@ import NotFound            from './pages/NotFound';
 
 const NO_CHROME = ['/login'];
 
-function GuardedRoute({ children }) {
-  return <SubscriptionGuard>{children}</SubscriptionGuard>;
-}
-
 function Layout() {
   const { pathname } = useLocation();
   const isPlay       = pathname.startsWith('/play/');
@@ -33,17 +28,17 @@ function Layout() {
       {!isFullScreen && <Navbar />}
       <main className={`h-full pb-0 flex-1 font-body${!isFullScreen ? ' mt-0 lg:mt-24' : ''}`}>
         <Routes>
-          <Route path="/"                element={<GuardedRoute><Home /></GuardedRoute>} />
-          <Route path="/tournaments"     element={<GuardedRoute><Tournaments /></GuardedRoute>} />
-          <Route path="/clashes"         element={<GuardedRoute><Clashes /></GuardedRoute>} />
-          <Route path="/games"           element={<GuardedRoute><Games /></GuardedRoute>} />
-          <Route path="/quickplay"       element={<GuardedRoute><QuickPlay /></GuardedRoute>} />
-          <Route path="/rewards"         element={<GuardedRoute><Rewards /></GuardedRoute>} />
+          <Route path="/"                element={<Home />} />
+          <Route path="/tournaments"     element={<Tournaments />} />
+          <Route path="/clashes"         element={<Clashes />} />
+          <Route path="/games"           element={<Games />} />
+          <Route path="/quickplay"       element={<QuickPlay />} />
+          <Route path="/rewards"         element={<Rewards />} />
           <Route path="/community"       element={<Community />} />
           <Route path="/support"         element={<Support />} />
           <Route path="/contact"         element={<Contact />} />
           <Route path="/login"           element={<Login />} />
-          <Route path="/play/:slug"      element={<GuardedRoute><PlayGame /></GuardedRoute>} />
+          <Route path="/play/:slug"      element={<SubscriptionGuard><PlayGame /></SubscriptionGuard>} />
           <Route path="*"               element={<NotFound />} />
         </Routes>
       </main>

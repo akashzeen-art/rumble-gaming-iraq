@@ -1,12 +1,12 @@
 import { useAuth } from '../AuthContext';
 import t from '../i18n/ar';
 
-export default function SubscribeModal({ onClose }) {
+export default function SubscribeModal({ onClose, onSubscribe }) {
   const { redirectToCampaign } = useAuth();
 
   const handleSubscribe = () => {
     onClose();
-    redirectToCampaign();
+    (onSubscribe || redirectToCampaign)();
   };
 
   return (

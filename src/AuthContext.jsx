@@ -23,25 +23,24 @@ function saveSession(data) {
   sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+function getInitialSession() {
+  const { subid: urlSubid, productcode: urlProductcode } = parseUrlParams();
+  const saved = loadSession();
+  return {
+    subid: urlSubid || saved?.subid || '0',
+    productcode: urlProductcode || saved?.productcode || PRODUCT_CODE,
+  };
+}
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [subid, setSubid] = useState(() => loadSession()?.subid || '0');
-  const [productcode, setProductcode] = useState(() => loadSession()?.productcode || PRODUCT_CODE);
+  const initial = getInitialSession();
+  const [subid, setSubid] = useState(initial.subid);
+  const [productcode, setProductcode] = useState(initial.productcode);
   const [isSubscribed, setIsSubscribed] = useState(null);
   const [account, setAccount] = useState(null);
   const [statusLoading, setStatusLoading] = useState(false);
-
-  useEffect(() => {
-    const { subid: urlSubid, productcode: urlProductcode } = parseUrlParams();
-    if (urlSubid) {
-      setSubid(urlSubid);
-      saveSession({ subid: urlSubid, productcode: urlProductcode || productcode });
-    }
-    if (urlProductcode) {
-      setProductcode(urlProductcode);
-    }
-  }, []);
 
   useEffect(() => {
     saveSession({ subid, productcode });
@@ -61,6 +60,11 @@ export function AuthProvider({ children }) {
       setStatusLoading(false);
     }
   }, [subid, productcode]);
+
+  // Check subscription in background on load – no redirect
+  useEffect(() => {
+    checkStatus();
+  }, [checkStatus]);
 
   const loadAccount = useCallback(async () => {
     try {

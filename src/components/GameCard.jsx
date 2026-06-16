@@ -15,16 +15,17 @@ export default function GameCard({
   textClass   = 'spot_fontcol',
   titleClass  = 'darklight_fontcol',
 }) {
-  const { isLoggedIn } = useAuth();
+  const { isSubscribed, checkStatus, redirectToCampaign, statusLoading } = useAuth();
   const navigate       = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const slug        = makeSlug(game.name);
   const thumb       = game.thumbnail_url || game.img;
   const displayName = t.gameNames[game.name] || game.name;
 
-  const handlePlay = (e) => {
+  const handlePlay = async (e) => {
     e.preventDefault();
-    if (isLoggedIn) {
+    const subscribed = isSubscribed === true ? true : await checkStatus();
+    if (subscribed) {
       navigate(`/play/${slug}`, { state: { game } });
     } else {
       setShowModal(true);
@@ -36,12 +37,12 @@ export default function GameCard({
       {showModal && (
         <SubscribeModal
           onClose={() => setShowModal(false)}
-          onSuccess={() => navigate(`/play/${slug}`, { state: { game } })}
+          onSubscribe={redirectToCampaign}
         />
       )}
 
       <div className="game-card-wrap card-hover">
-        <div onClick={handlePlay} style={{ cursor: 'pointer' }}>
+        <div onClick={handlePlay} style={{ cursor: statusLoading ? 'wait' : 'pointer' }}>
           <div className={`flex-none rounded-2xlg border-3 lg:border-4 ${borderClass} overflow-hidden relative z-10`}>
             <img
               src={thumb}
@@ -57,7 +58,7 @@ export default function GameCard({
             </div>
           </div>
         </div>
-        <div onClick={handlePlay} style={{ cursor: 'pointer' }}>
+        <div onClick={handlePlay} style={{ cursor: statusLoading ? 'wait' : 'pointer' }}>
           <div className={`flex flex-row w-16/20 mx-auto justify-center rounded-b-3xl ${btnBgClass} py-1 lg:pb-0 px-2 relative z-5`}>
             <div className={`flex content-center pb-1 text-xs ${textClass} font-body mt-auto`}>
               <p className={`${textClass} text-center uppercase font-black font-heading leading-1 lg:leading-5 pt-4 text-xl lg:text-3xl font-semibold cursor-pointer`}>
