@@ -36,7 +36,10 @@ export default function SubscribeModal({ onClose, onSuccess }) {
         onClose();
         onSuccess?.();
       } else {
-        redirectToCampaign();
+        const result = await redirectToCampaign(fullMsisdn);
+        if (!result?.ok) {
+          setError(t.sub_error_campaign);
+        }
       }
     } catch {
       setError(t.sub_error_net);

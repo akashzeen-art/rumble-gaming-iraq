@@ -4,11 +4,12 @@ import {
   checkSubscriptionStatus,
   getAccountDetail,
   deactivateSubscription,
-  getCampaignUrl,
+  resolveCampaignTarget,
   parseUrlParams,
   sanitizeSubid,
   sanitizeProductcode,
   sanitizeMsisdn,
+  isValidMsisdn,
 } from './auth';
 
 const STORAGE_KEY = 'gamifya_session';
@@ -29,10 +30,14 @@ function saveSession(data) {
 function getInitialSession() {
   const { subid: urlSubid, productcode: urlProductcode, msisdn: urlMsisdn } = parseUrlParams();
   const saved = loadSession();
+  const msisdn = sanitizeMsisdn(urlMsisdn || saved?.msisdn) || '';
+  if (saved?.msisdn && !msisdn) {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
   return {
     subid: urlSubid ?? sanitizeSubid(saved?.subid) ?? '0',
     productcode: sanitizeProductcode(urlProductcode || saved?.productcode),
-    msisdn: sanitizeMsisdn(urlMsisdn || saved?.msisdn) || '',
+    msisdn,
   };
 }
 
@@ -57,12 +62,17 @@ export function AuthProvider({ children }) {
 
   const checkStatus = useCallback(async (msisdnOverride) => {
     const phone = sanitizeMsisdn(msisdnOverride) || sanitizeMsisdn(msisdn) || null;
+    if (!phone) {
+      setIsSubscribed(false);
+      return false;
+    }
     setStatusLoading(true);
     try {
       const data = await checkSubscriptionStatus(subid, productcode, phone);
       const subscribed = Number(data.status) === 1;
       setIsSubscribed(subscribed);
-      if (data.msisdn) setMsisdnState(sanitizeMsisdn(data.msisdn));
+      const echoed = sanitizeMsisdn(data.msisdn);
+      if (echoed) setMsisdnState(echoed);
       return subscribed;
     } catch {
       setIsSubscribed(false);
@@ -72,9 +82,9 @@ export function AuthProvider({ children }) {
     }
   }, [subid, productcode, msisdn]);
 
-  // Status check on load only when msisdn is already known
+  // Status check on load only when msisdn is valid
   useEffect(() => {
-    if (msisdn) checkStatus();
+    if (isValidMsisdn(msisdn)) checkStatus();
   }, [msisdn, checkStatus]);
 
   const loadAccount = useCallback(async () => {
@@ -82,7 +92,8 @@ export function AuthProvider({ children }) {
     try {
       const data = await getAccountDetail(subid, productcode, phone);
       setAccount(data);
-      if (data.msisdn) setMsisdnState(sanitizeMsisdn(data.msisdn));
+      const echoed = sanitizeMsisdn(data.msisdn);
+      if (echoed) setMsisdnState(echoed);
       setIsSubscribed(Number(data.status) === 1);
       return data;
     } catch {
@@ -91,10 +102,14 @@ export function AuthProvider({ children }) {
     }
   }, [subid, productcode, msisdn]);
 
-  const redirectToCampaign = useCallback(() => {
-    const phone = sanitizeMsisdn(msisdn) || null;
-    const url = getCampaignUrl(subid, productcode, phone);
-    window.location.assign(url);
+  const redirectToCampaign = useCallback(async (msisdnOverride) => {
+    const phone = sanitizeMsisdn(msisdnOverride) || sanitizeMsisdn(msisdn) || null;
+    const target = await resolveCampaignTarget(subid, productcode, phone);
+    if (!target) {
+      return { ok: false, reason: 'campaign_unavailable' };
+    }
+    window.location.assign(target);
+    return { ok: true };
   }, [subid, productcode, msisdn]);
 
   const unsubscribe = useCallback(async () => {

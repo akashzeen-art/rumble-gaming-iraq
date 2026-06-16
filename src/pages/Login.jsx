@@ -1,17 +1,18 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
+import SubscribeModal from '../components/SubscribeModal';
 import t from '../i18n/ar';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { redirectToCampaign } = useAuth();
-
-  const handleSubscribe = () => {
-    redirectToCampaign();
-  };
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="min-h-screen bg_hue_4_start flex items-center justify-center px-4 py-12">
+      {showModal && (
+        <SubscribeModal onClose={() => setShowModal(false)} onSuccess={() => navigate('/')} />
+      )}
       <div className="auth-card">
         <div className="text-center mb-6">
           <h1 className="font-heading text-2xl font-black font_hue_4_start uppercase">{t.login_title}</h1>
@@ -19,7 +20,7 @@ export default function Login() {
         </div>
 
         <button
-          onClick={handleSubscribe}
+          onClick={() => setShowModal(true)}
           className="w-full bg_spot_start spot_fontcol font-heading font-black uppercase text-lg py-3 rounded-xl hover:opacity-90 transition-opacity"
         >
           {t.profile_subscribe}

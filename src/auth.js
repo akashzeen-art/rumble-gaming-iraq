@@ -45,8 +45,43 @@ export async function deactivateSubscription(subid, productcode = PRODUCT_CODE, 
   return fetchJson(url);
 }
 
+/** Probe /act → /cmp; return redirect target or null if campaign is disabled. */
+export async function resolveCampaignTarget(subid, productcode = PRODUCT_CODE, msisdn = null) {
+  const actProxy = buildCampaignUrl(subid, productcode, msisdn).replace(API_BASE, '/api/rubycom/cnt');
+
+  try {
+    const actRes = await fetch(actProxy, { redirect: 'manual' });
+    const cmpLocation = actRes.headers.get('Location') || '';
+    if (!cmpLocation || cmpLocation.includes('error=')) {
+      return null;
+    }
+    if (actRes.status < 300 || actRes.status >= 400) {
+      return null;
+    }
+
+    const cmpUrl = cmpLocation.startsWith('http')
+      ? cmpLocation
+      : `${API_BASE}${cmpLocation.startsWith('/') ? '' : '/'}${cmpLocation}`;
+    const cmpProxy = cmpUrl.replace(API_BASE, '/api/rubycom/cnt');
+    const cmpRes = await fetch(cmpProxy, { redirect: 'manual' });
+    const finalLocation = cmpRes.headers.get('Location') || '';
+    if (finalLocation.includes('error=Campaign') || finalLocation.startsWith('&error')) {
+      return null;
+    }
+
+    return cmpProxy;
+  } catch {
+    return null;
+  }
+}
+
 export function getCampaignUrl(subid, productcode = PRODUCT_CODE, msisdn = null) {
   return buildCampaignUrl(subid, productcode, msisdn);
+}
+
+/** Same as getCampaignUrl but routed through our nginx/vite proxy. */
+export function getCampaignProxyUrl(subid, productcode = PRODUCT_CODE, msisdn = null) {
+  return buildCampaignUrl(subid, productcode, msisdn).replace(API_BASE, '/api/rubycom/cnt');
 }
 
 export function parseUrlParams() {

@@ -24,6 +24,11 @@ fi
 
 ln -sf "${NGINX_AVAILABLE}" "${NGINX_ENABLED}"
 
+# Ensure firewall allows web traffic
+if command -v ufw >/dev/null 2>&1 && ufw status 2>/dev/null | grep -q "Status: active"; then
+  ufw allow 'Nginx Full' >/dev/null 2>&1 || true
+fi
+
 nginx -t
 systemctl reload nginx
 

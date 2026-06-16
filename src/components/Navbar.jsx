@@ -2,12 +2,15 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { languages, PODS_IMG } from '../data';
 import { useAuth } from '../AuthContext';
+import SubscribeModal from './SubscribeModal';
 import t from '../i18n/ar';
 
 function AccountPanel({ onClose }) {
-  const { account, loadAccount, redirectToCampaign, unsubscribe } = useAuth();
+  const { account, loadAccount, unsubscribe } = useAuth();
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+  const [actionError, setActionError] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -19,12 +22,13 @@ function AccountPanel({ onClose }) {
   const isActive = Number(account?.status) === 1;
 
   const handleAction = async () => {
+    setActionError('');
     setActionLoading(true);
     try {
       if (isActive) {
         await unsubscribe();
       } else {
-        redirectToCampaign();
+        setShowSubscribeModal(true);
       }
     } finally {
       setActionLoading(false);
@@ -32,6 +36,13 @@ function AccountPanel({ onClose }) {
   };
 
   return (
+    <>
+      {showSubscribeModal && (
+        <SubscribeModal
+          onClose={() => setShowSubscribeModal(false)}
+          onSuccess={() => { setShowSubscribeModal(false); loadAccount(); }}
+        />
+      )}
     <div style={{
       position: 'fixed', inset: 0, zIndex: 999,
       background: 'rgba(0,0,0,0.6)',
@@ -96,10 +107,16 @@ function AccountPanel({ onClose }) {
                 ? <span><i className="fas fa-spinner fa-spin" style={{ marginLeft: '6px' }}></i></span>
                 : isActive ? t.profile_unsubscribe : t.profile_subscribe}
             </button>
+            {actionError && (
+              <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.72rem', color: '#dc2626', textAlign: 'center', marginTop: '0.5rem' }}>
+                {actionError}
+              </p>
+            )}
           </div>
         )}
       </div>
     </div>
+    </>
   );
 }
 
