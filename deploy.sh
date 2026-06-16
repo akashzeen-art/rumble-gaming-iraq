@@ -36,6 +36,6 @@ fi
 
 echo ""
 echo "Deployment complete."
-echo "  Site:  http://${DOMAIN}"
+echo "  Site:  https://${DOMAIN}"
 echo "  Files: ${DEPLOY_DIR}/dist"
 ls -la dist/
