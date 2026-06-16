@@ -22,7 +22,7 @@ const ar = {
   sub_title:       'تسجيل الدخول للعب',
   sub_subtitle:    'أدخل رقم هاتفك للوصول إلى الألعاب',
   sub_mobileLabel: 'رقم الهاتف',
-  sub_placeholder: '0000000000',
+  sub_placeholder: '0575203579',
   sub_btn:         'العب الآن',
   sub_loading:     'جارٍ التحقق...',
   sub_redirect:    'لست مشتركاً؟ سيتم تحويلك للاشتراك.',

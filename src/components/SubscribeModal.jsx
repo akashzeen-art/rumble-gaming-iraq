@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { COUNTRY_CODE } from '../config';
+import { COUNTRY_CODE, normalizeMsisdn } from '../config';
 import { useAuth } from '../AuthContext';
 import t from '../i18n/ar';
 
@@ -12,13 +12,11 @@ export default function SubscribeModal({ onClose, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const cleaned = mobile.replace(/\D/g, '');
-    if (cleaned.length < 7) {
+    const fullMsisdn = normalizeMsisdn(mobile);
+    if (!fullMsisdn) {
       setError(t.sub_error_short);
       return;
     }
-
-    const fullMsisdn = COUNTRY_CODE + cleaned;
     setMsisdn(fullMsisdn);
     setLoading(true);
 

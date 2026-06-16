@@ -22,8 +22,24 @@ export function sanitizeProductcode(productcode) {
 }
 
 export function sanitizeMsisdn(msisdn) {
-  if (!msisdn) return null;
-  return String(msisdn).replace(/\D/g, '');
+  return normalizeMsisdn(msisdn);
+}
+
+/** Build full msisdn: country 225 + local 0575203579 → 2250575203579 */
+export function normalizeMsisdn(input) {
+  let digits = String(input || '').replace(/\D/g, '');
+  if (!digits) return null;
+
+  if (digits.startsWith(COUNTRY_CODE) && digits.length > COUNTRY_CODE.length) {
+    return digits;
+  }
+
+  // CI local numbers are 10 digits starting with 0
+  if (digits.length === 9 && !digits.startsWith('0')) {
+    digits = `0${digits}`;
+  }
+
+  return `${COUNTRY_CODE}${digits}`;
 }
 
 /**
