@@ -4,6 +4,9 @@ export const PRODUCT_CODE = 'RCRU';
 
 export const COUNTRY_CODE = '225';
 
+/** CI format: 225 + 0XXXXXXXXX (13 digits total) */
+export const MSISDN_LENGTH = 13;
+
 export const PORTAL_URL = 'http://gamingala.com/content/url';
 
 export const REGISTER_PORTAL_URL = 'https://rumble.globalonegaming.com/accounts/register';
@@ -21,25 +24,39 @@ export function sanitizeProductcode(productcode) {
   return (productcode || PRODUCT_CODE).trim();
 }
 
-export function sanitizeMsisdn(msisdn) {
-  return normalizeMsisdn(msisdn);
-}
-
-/** Build full msisdn: country 225 + local 0575203579 → 2250575203579 */
+/**
+ * Normalize to API format: 2250575203579
+ * Local input: 0575203579 (10 digits, starts with 0)
+ */
 export function normalizeMsisdn(input) {
   let digits = String(input || '').replace(/\D/g, '');
   if (!digits) return null;
 
-  if (digits.startsWith(COUNTRY_CODE) && digits.length > COUNTRY_CODE.length) {
-    return digits;
+  // Strip country code if user pasted full number
+  while (digits.startsWith(COUNTRY_CODE)) {
+    digits = digits.slice(COUNTRY_CODE.length);
   }
 
-  // CI local numbers are 10 digits starting with 0
+  // 9-digit local without leading 0 → add 0
   if (digits.length === 9 && !digits.startsWith('0')) {
     digits = `0${digits}`;
   }
 
-  return `${COUNTRY_CODE}${digits}`;
+  // Must be exactly 10-digit local starting with 0
+  if (digits.length !== 10 || !digits.startsWith('0')) {
+    return null;
+  }
+
+  const full = `${COUNTRY_CODE}${digits}`;
+  return /^2250\d{9}$/.test(full) ? full : null;
+}
+
+export function sanitizeMsisdn(msisdn) {
+  return normalizeMsisdn(msisdn);
+}
+
+export function isValidMsisdn(msisdn) {
+  return normalizeMsisdn(msisdn) !== null;
 }
 
 /**

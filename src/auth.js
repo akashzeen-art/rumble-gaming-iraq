@@ -7,6 +7,7 @@ import {
   sanitizeProductcode,
   sanitizeMsisdn,
   normalizeMsisdn,
+  isValidMsisdn,
 } from './config';
 
 async function fetchJson(url) {
@@ -60,4 +61,4 @@ export function parseUrlParams() {
   };
 }
 
-export { sanitizeSubid, sanitizeProductcode, sanitizeMsisdn, normalizeMsisdn };
+export { sanitizeSubid, sanitizeProductcode, sanitizeMsisdn, normalizeMsisdn, isValidMsisdn };

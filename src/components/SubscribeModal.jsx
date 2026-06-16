@@ -3,6 +3,14 @@ import { COUNTRY_CODE, normalizeMsisdn } from '../config';
 import { useAuth } from '../AuthContext';
 import t from '../i18n/ar';
 
+function cleanLocalInput(value) {
+  let digits = value.replace(/\D/g, '');
+  while (digits.startsWith(COUNTRY_CODE)) {
+    digits = digits.slice(COUNTRY_CODE.length);
+  }
+  return digits.slice(0, 10);
+}
+
 export default function SubscribeModal({ onClose, onSuccess }) {
   const [mobile, setMobile] = useState('');
   const [error, setError] = useState('');
@@ -12,11 +20,13 @@ export default function SubscribeModal({ onClose, onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
     const fullMsisdn = normalizeMsisdn(mobile);
     if (!fullMsisdn) {
-      setError(t.sub_error_short);
+      setError(t.sub_error_format);
       return;
     }
+
     setMsisdn(fullMsisdn);
     setLoading(true);
 
@@ -67,9 +77,9 @@ export default function SubscribeModal({ onClose, onSuccess }) {
             <input
               type="tel"
               value={mobile}
-              onChange={e => setMobile(e.target.value)}
+              onChange={e => setMobile(cleanLocalInput(e.target.value))}
               placeholder={t.sub_placeholder}
-              maxLength={12}
+              maxLength={10}
               autoFocus
               style={{ flex: 1, border: 'none', padding: '0.6rem 1rem', fontFamily: 'Montserrat, sans-serif', fontSize: '0.9rem', outline: 'none', color: '#00122d' }}
             />
