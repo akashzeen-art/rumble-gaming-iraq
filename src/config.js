@@ -8,31 +8,46 @@ export const PORTAL_URL = 'http://gamingala.com/content/url';
 
 export const REGISTER_PORTAL_URL = 'https://rumble.globalonegaming.com/accounts/register';
 
-/** Normalize subid – use 0 if missing or invalid placeholder. */
+/** subid=0 when missing (per API spec). */
 export function sanitizeSubid(subid) {
-  if (!subid || subid === '0' || subid === 'YOUR_SUBID' || subid === 'undefined' || subid === 'null') {
+  if (subid === null || subid === undefined || subid === '' ||
+      subid === 'YOUR_SUBID' || subid === 'undefined' || subid === 'null') {
     return '0';
   }
   return String(subid).trim();
 }
 
 export function sanitizeProductcode(productcode) {
-  return productcode || PRODUCT_CODE;
+  return (productcode || PRODUCT_CODE).trim();
 }
 
-export function buildApiUrl(path, subid, productcode = PRODUCT_CODE) {
+export function sanitizeMsisdn(msisdn) {
+  if (!msisdn) return null;
+  return String(msisdn).replace(/\D/g, '');
+}
+
+/**
+ * Build API URL exactly as curl:
+ * ?subid=0&productcode=RCRU&msisdn=2250575203579
+ */
+export function buildApiUrl(path, subid, productcode = PRODUCT_CODE, msisdn = null) {
   const id = sanitizeSubid(subid);
   const code = sanitizeProductcode(productcode);
-  return `${API_BASE}${path}?subid=${encodeURIComponent(id)}&productcode=${encodeURIComponent(code)}`;
+  const params = new URLSearchParams();
+  params.set('subid', id);
+  params.set('productcode', code);
+  const cleanedMsisdn = sanitizeMsisdn(msisdn);
+  if (cleanedMsisdn) {
+    params.set('msisdn', cleanedMsisdn);
+  }
+  return `${API_BASE}${path}?${params.toString()}`;
 }
 
-/** Campaign URL – redirect here when user is not subscribed. */
-export function buildCampaignUrl(subid, productcode = PRODUCT_CODE) {
-  return buildApiUrl('/act', subid, productcode);
+export function buildCampaignUrl(subid, productcode = PRODUCT_CODE, msisdn = null) {
+  return buildApiUrl('/act', subid, productcode, msisdn);
 }
 
-/** Gamers Gala Portal URL – entry after subscription. */
-export function buildPortalUrl(subid, productcode = PRODUCT_CODE) {
+export function buildGamingalaPortalUrl(subid, productcode = PRODUCT_CODE) {
   const id = sanitizeSubid(subid);
   const code = sanitizeProductcode(productcode);
   return `${PORTAL_URL}?subid=${encodeURIComponent(id)}&productcode=${encodeURIComponent(code)}`;

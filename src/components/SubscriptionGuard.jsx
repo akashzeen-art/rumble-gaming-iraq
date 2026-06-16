@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../AuthContext';
 
 export default function SubscriptionGuard({ children }) {
-  const { checkStatus, redirectToCampaign } = useAuth();
+  const { checkStatus, redirectToCampaign, msisdn } = useAuth();
   const [checking, setChecking] = useState(true);
   const [allowed, setAllowed]   = useState(false);
 
@@ -10,7 +10,7 @@ export default function SubscriptionGuard({ children }) {
     let cancelled = false;
 
     (async () => {
-      const subscribed = await checkStatus();
+      const subscribed = await checkStatus(msisdn || null);
       if (cancelled) return;
       if (!subscribed) {
         redirectToCampaign();
@@ -21,7 +21,7 @@ export default function SubscriptionGuard({ children }) {
     })();
 
     return () => { cancelled = true; };
-  }, [checkStatus, redirectToCampaign]);
+  }, [checkStatus, redirectToCampaign, msisdn]);
 
   if (checking || !allowed) {
     return (

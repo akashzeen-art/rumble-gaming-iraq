@@ -23,7 +23,7 @@ export default function SubscribeModal({ onClose, onSuccess }) {
     setLoading(true);
 
     try {
-      const subscribed = await checkStatus();
+      const subscribed = await checkStatus(fullMsisdn);
       if (subscribed) {
         onClose();
         onSuccess?.();

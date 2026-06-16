@@ -8,6 +8,7 @@ import {
   parseUrlParams,
   sanitizeSubid,
   sanitizeProductcode,
+  sanitizeMsisdn,
 } from './auth';
 
 const STORAGE_KEY = 'gamifya_session';
@@ -26,12 +27,12 @@ function saveSession(data) {
 }
 
 function getInitialSession() {
-  const { subid: urlSubid, productcode: urlProductcode } = parseUrlParams();
+  const { subid: urlSubid, productcode: urlProductcode, msisdn: urlMsisdn } = parseUrlParams();
   const saved = loadSession();
   return {
-    subid: urlSubid || sanitizeSubid(saved?.subid) || '0',
+    subid: urlSubid ?? sanitizeSubid(saved?.subid) ?? '0',
     productcode: sanitizeProductcode(urlProductcode || saved?.productcode),
-    msisdn: saved?.msisdn || '',
+    msisdn: sanitizeMsisdn(urlMsisdn || saved?.msisdn) || '',
   };
 }
 
@@ -51,15 +52,17 @@ export function AuthProvider({ children }) {
   }, [subid, productcode, msisdn]);
 
   const setMsisdn = useCallback((value) => {
-    setMsisdnState(value);
+    setMsisdnState(sanitizeMsisdn(value) || '');
   }, []);
 
-  const checkStatus = useCallback(async () => {
+  const checkStatus = useCallback(async (msisdnOverride) => {
+    const phone = sanitizeMsisdn(msisdnOverride) || sanitizeMsisdn(msisdn) || null;
     setStatusLoading(true);
     try {
-      const data = await checkSubscriptionStatus(subid, productcode);
+      const data = await checkSubscriptionStatus(subid, productcode, phone);
       const subscribed = Number(data.status) === 1;
       setIsSubscribed(subscribed);
+      if (data.msisdn) setMsisdnState(sanitizeMsisdn(data.msisdn));
       return subscribed;
     } catch {
       setIsSubscribed(false);
@@ -67,36 +70,39 @@ export function AuthProvider({ children }) {
     } finally {
       setStatusLoading(false);
     }
-  }, [subid, productcode]);
+  }, [subid, productcode, msisdn]);
 
-  // Status check on content page load
+  // Status check on load only when msisdn is already known
   useEffect(() => {
-    checkStatus();
-  }, [checkStatus]);
+    if (msisdn) checkStatus();
+  }, [msisdn, checkStatus]);
 
   const loadAccount = useCallback(async () => {
+    const phone = sanitizeMsisdn(msisdn) || null;
     try {
-      const data = await getAccountDetail(subid, productcode);
+      const data = await getAccountDetail(subid, productcode, phone);
       setAccount(data);
-      if (data.msisdn) setMsisdnState(data.msisdn);
+      if (data.msisdn) setMsisdnState(sanitizeMsisdn(data.msisdn));
       setIsSubscribed(Number(data.status) === 1);
       return data;
     } catch {
       setAccount(null);
       return null;
     }
-  }, [subid, productcode]);
+  }, [subid, productcode, msisdn]);
 
   const redirectToCampaign = useCallback(() => {
-    const url = getCampaignUrl(subid, productcode);
+    const phone = sanitizeMsisdn(msisdn) || null;
+    const url = getCampaignUrl(subid, productcode, phone);
     window.location.assign(url);
-  }, [subid, productcode]);
+  }, [subid, productcode, msisdn]);
 
   const unsubscribe = useCallback(async () => {
-    await deactivateSubscription(subid, productcode);
+    const phone = sanitizeMsisdn(msisdn) || null;
+    await deactivateSubscription(subid, productcode, phone);
     setIsSubscribed(false);
     await loadAccount();
-  }, [subid, productcode, loadAccount]);
+  }, [subid, productcode, msisdn, loadAccount]);
 
   const updateSubid = useCallback((newSubid) => {
     setSubid(sanitizeSubid(newSubid));

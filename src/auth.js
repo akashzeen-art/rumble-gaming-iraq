@@ -5,6 +5,7 @@ import {
   buildCampaignUrl,
   sanitizeSubid,
   sanitizeProductcode,
+  sanitizeMsisdn,
 } from './config';
 
 async function fetchJson(url) {
@@ -27,33 +28,35 @@ async function fetchJson(url) {
   return data;
 }
 
-export async function checkSubscriptionStatus(subid, productcode = PRODUCT_CODE) {
-  const url = buildApiUrl('/sub/status', subid, productcode);
+export async function checkSubscriptionStatus(subid, productcode = PRODUCT_CODE, msisdn = null) {
+  const url = buildApiUrl('/sub/status', subid, productcode, msisdn);
   return fetchJson(url);
 }
 
-export async function getAccountDetail(subid, productcode = PRODUCT_CODE) {
-  const url = buildApiUrl('/sub/detail', subid, productcode);
+export async function getAccountDetail(subid, productcode = PRODUCT_CODE, msisdn = null) {
+  const url = buildApiUrl('/sub/detail', subid, productcode, msisdn);
   return fetchJson(url);
 }
 
-export async function deactivateSubscription(subid, productcode = PRODUCT_CODE) {
-  const url = buildApiUrl('/dct', subid, productcode);
+export async function deactivateSubscription(subid, productcode = PRODUCT_CODE, msisdn = null) {
+  const url = buildApiUrl('/dct', subid, productcode, msisdn);
   return fetchJson(url);
 }
 
-export function getCampaignUrl(subid, productcode = PRODUCT_CODE) {
-  return buildCampaignUrl(subid, productcode);
+export function getCampaignUrl(subid, productcode = PRODUCT_CODE, msisdn = null) {
+  return buildCampaignUrl(subid, productcode, msisdn);
 }
 
 export function parseUrlParams() {
   const params = new URLSearchParams(window.location.search);
   const subid = params.get('subid');
   const productcode = params.get('productcode');
+  const msisdn = params.get('msisdn');
   return {
-    subid: subid ? sanitizeSubid(subid) : null,
+    subid: subid !== null ? sanitizeSubid(subid) : null,
     productcode: productcode ? sanitizeProductcode(productcode) : null,
+    msisdn: msisdn ? sanitizeMsisdn(msisdn) : null,
   };
 }
 
-export { sanitizeSubid, sanitizeProductcode };
+export { sanitizeSubid, sanitizeProductcode, sanitizeMsisdn };
