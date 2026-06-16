@@ -4,14 +4,16 @@ import { useAuth } from '../AuthContext';
 import t from '../i18n/ar';
 
 export default function SubscribeModal({ onClose, onSuccess }) {
-  const [mobile,  setMobile]  = useState('');
-  const [error,   setError]   = useState('');
+  const [mobile, setMobile] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [needsSubscribe, setNeedsSubscribe] = useState(false);
   const { checkStatus, redirectToCampaign, setMsisdn } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setNeedsSubscribe(false);
     const cleaned = mobile.replace(/\D/g, '');
     if (cleaned.length < 7) {
       setError(t.sub_error_short);
@@ -28,13 +30,18 @@ export default function SubscribeModal({ onClose, onSuccess }) {
         onClose();
         onSuccess?.();
       } else {
-        redirectToCampaign();
+        setNeedsSubscribe(true);
+        setError(t.sub_error_sub);
       }
     } catch {
       setError(t.sub_error_net);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubscribe = () => {
+    redirectToCampaign();
   };
 
   return (
@@ -73,6 +80,7 @@ export default function SubscribeModal({ onClose, onSuccess }) {
               placeholder={t.sub_placeholder}
               maxLength={12}
               autoFocus
+              disabled={needsSubscribe}
               style={{ flex: 1, border: 'none', padding: '0.6rem 1rem', fontFamily: 'Montserrat, sans-serif', fontSize: '0.9rem', outline: 'none', color: '#00122d' }}
             />
           </div>
@@ -84,15 +92,25 @@ export default function SubscribeModal({ onClose, onSuccess }) {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            style={{ width: '100%', background: loading ? '#ccc' : '#ff9e03', color: '#000', fontFamily: "'Baloo Tamma 2', cursive", fontWeight: 900, fontSize: '1.1rem', textTransform: 'uppercase', padding: '0.6rem', borderRadius: '0.75rem', border: 'none', cursor: loading ? 'not-allowed' : 'pointer' }}
-          >
-            {loading
-              ? <span><i className="fas fa-spinner fa-spin" style={{ marginLeft: '0.5rem' }}></i>{t.sub_loading}</span>
-              : t.sub_btn}
-          </button>
+          {needsSubscribe ? (
+            <button
+              type="button"
+              onClick={handleSubscribe}
+              style={{ width: '100%', background: '#ff9e03', color: '#000', fontFamily: "'Baloo Tamma 2', cursive", fontWeight: 900, fontSize: '1.1rem', textTransform: 'uppercase', padding: '0.6rem', borderRadius: '0.75rem', border: 'none', cursor: 'pointer' }}
+            >
+              {t.profile_subscribe}
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={loading}
+              style={{ width: '100%', background: loading ? '#ccc' : '#ff9e03', color: '#000', fontFamily: "'Baloo Tamma 2', cursive", fontWeight: 900, fontSize: '1.1rem', textTransform: 'uppercase', padding: '0.6rem', borderRadius: '0.75rem', border: 'none', cursor: loading ? 'not-allowed' : 'pointer' }}
+            >
+              {loading
+                ? <span><i className="fas fa-spinner fa-spin" style={{ marginLeft: '0.5rem' }}></i>{t.sub_loading}</span>
+                : t.sub_btn}
+            </button>
+          )}
         </form>
 
         <p style={{ fontFamily: 'Montserrat, sans-serif', fontSize: '0.72rem', color: 'rgba(0,0,0,0.4)', textAlign: 'center', marginTop: '0.75rem' }}>

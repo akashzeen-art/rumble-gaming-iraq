@@ -28,6 +28,7 @@ const ar = {
   sub_redirect:    'لست مشتركاً؟ سيتم تحويلك للاشتراك.',
   sub_error_short: 'يرجى إدخال رقم هاتف صحيح.',
   sub_error_net:   'خطأ في الشبكة. حاول مرة أخرى.',
+  sub_error_sub:   'الاشتراك غير موجود. اضغط اشترك للمتابعة.',
 
   // Profile / My Account
   profile_activated:   'تاريخ التفعيل',
