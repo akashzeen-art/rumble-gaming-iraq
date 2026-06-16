@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { languages, LOGO_IMG, PODS_IMG } from '../data';
+import { languages, PODS_IMG } from '../data';
 import { useAuth } from '../AuthContext';
 import t from '../i18n/ar';
 
@@ -193,13 +193,13 @@ export default function Navbar() {
 
         <div className="flex lg:hidden justify-center">
           <div className="relative flex w-full justify-center">
-            <Link to="/"><img src={LOGO_IMG} alt="Gamifya logo" className="max-h-13 w-auto p-2 max-w-sm" /></Link>
+            <Link to="/" className="font-heading font-black text-xl nav_fontcol uppercase px-4 py-2">Rumble</Link>
           </div>
         </div>
 
         <div className="hidden lg:flex justify-center relative">
           <div className="flex w-full xl:container xl:mx-auto">
-            <Link to="/"><div className="ml-6"><img src={LOGO_IMG} alt="Gamifya logo" className="max-h-14 w-auto p-2 max-w-xs" /></div></Link>
+            <Link to="/"><div className="ml-6 font-heading font-black text-2xl nav_fontcol uppercase px-4 py-2">Rumble</div></Link>
             <div className="w-full flex flex-grow items-center pl-4">
               <div className="relative text-sm flex-grow flex flex-row text-center">
                 {navLinks.map(l => (

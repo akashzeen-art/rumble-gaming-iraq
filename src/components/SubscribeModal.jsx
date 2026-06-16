@@ -1,4 +1,3 @@
-import { LOGO_IMG } from '../data';
 import { useAuth } from '../AuthContext';
 import t from '../i18n/ar';
 
@@ -22,7 +21,6 @@ export default function SubscribeModal({ onClose }) {
         <button onClick={onClose} style={{ position: 'absolute', top: '0.75rem', left: '1rem', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#374151', lineHeight: 1 }}>×</button>
 
         <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
-          <img src={LOGO_IMG} alt="Gamifya" style={{ height: '2.5rem', margin: '0 auto 0.75rem' }} />
           <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(135deg,#00c5eb,#006177)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.75rem' }}>
             <i className="fas fa-gamepad" style={{ color: '#fff', fontSize: '1.5rem' }}></i>
           </div>

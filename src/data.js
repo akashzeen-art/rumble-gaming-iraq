@@ -54,7 +54,6 @@ export const languages = [
 ];
 
 export const PODS_IMG      = 'https://gamifya.com/storage/default/ibTwpivcn3tLHbvG1wSj5gOwVxYjW1u6SNG3JyRv.png';
-export const LOGO_IMG      = 'https://gamifya.com/storage/images/logos/MM8TFj0UNHiKRifmGFl1Hw5uDTtOsZ6FIdtO50UB.png';
 export const PROMO_IMG     = 'https://gamifya.com/storage/images/promotions/IJMrsj25asKG1KWxQuz8FsFjbDqQup04dzhLkb2W.png';
 export const AWARDS_FLAG_L = 'https://gamifya.com/storage/images/assets/awards_flag_l.png';
 export const AWARDS_FLAG_R = 'https://gamifya.com/storage/images/assets/awards_flag_r.png';

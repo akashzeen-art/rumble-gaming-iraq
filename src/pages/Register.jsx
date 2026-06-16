@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LOGO_IMG } from '../data';
 
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', mobile: '', password: '', confirm: '' });
@@ -10,7 +9,6 @@ export default function Register() {
     <div className="min-h-screen bg_hue_4_start flex items-center justify-center px-4 py-12">
       <div className="auth-card">
         <div className="text-center mb-6">
-          <img src={LOGO_IMG} alt="Gamifya" className="h-14 mx-auto mb-4" />
           <h1 className="font-heading text-2xl font-black font_hue_4_start uppercase">Create Account</h1>
           <p className="font-body text-sm grey_font mt-1">Join Gamifya for free</p>
         </div>
