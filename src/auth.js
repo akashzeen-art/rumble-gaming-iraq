@@ -1,4 +1,11 @@
-import { API_BASE, PRODUCT_CODE, buildApiUrl, buildCampaignUrl } from './config';
+import {
+  API_BASE,
+  PRODUCT_CODE,
+  buildApiUrl,
+  buildCampaignUrl,
+  sanitizeSubid,
+  sanitizeProductcode,
+} from './config';
 
 async function fetchJson(url) {
   let data;
@@ -7,7 +14,8 @@ async function fetchJson(url) {
     const proxyPath = url.replace(API_BASE, '/api/rubycom/cnt');
     const res = await fetch(proxyPath);
     if (!res.ok) throw new Error('proxy_failed');
-    data = await res.json();
+    const text = await res.text();
+    data = JSON.parse(text);
   } catch {
     const encoded = encodeURIComponent(url);
     const res = await fetch(`https://api.allorigins.win/get?url=${encoded}`);
@@ -40,8 +48,12 @@ export function getCampaignUrl(subid, productcode = PRODUCT_CODE) {
 
 export function parseUrlParams() {
   const params = new URLSearchParams(window.location.search);
+  const subid = params.get('subid');
+  const productcode = params.get('productcode');
   return {
-    subid: params.get('subid') || null,
-    productcode: params.get('productcode') || null,
+    subid: subid ? sanitizeSubid(subid) : null,
+    productcode: productcode ? sanitizeProductcode(productcode) : null,
   };
 }
+
+export { sanitizeSubid, sanitizeProductcode };

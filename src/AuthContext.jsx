@@ -6,6 +6,8 @@ import {
   deactivateSubscription,
   getCampaignUrl,
   parseUrlParams,
+  sanitizeSubid,
+  sanitizeProductcode,
 } from './auth';
 
 const STORAGE_KEY = 'gamifya_session';
@@ -27,8 +29,8 @@ function getInitialSession() {
   const { subid: urlSubid, productcode: urlProductcode } = parseUrlParams();
   const saved = loadSession();
   return {
-    subid: urlSubid || saved?.subid || '0',
-    productcode: urlProductcode || saved?.productcode || PRODUCT_CODE,
+    subid: urlSubid || sanitizeSubid(saved?.subid) || '0',
+    productcode: sanitizeProductcode(urlProductcode || saved?.productcode),
     msisdn: saved?.msisdn || '',
   };
 }
@@ -38,7 +40,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const initial = getInitialSession();
   const [subid, setSubid] = useState(initial.subid);
-  const [productcode, setProductcode] = useState(initial.productcode);
+  const [productcode, setProductcodeState] = useState(initial.productcode);
   const [msisdn, setMsisdnState] = useState(initial.msisdn);
   const [isSubscribed, setIsSubscribed] = useState(null);
   const [account, setAccount] = useState(null);
@@ -67,7 +69,7 @@ export function AuthProvider({ children }) {
     }
   }, [subid, productcode]);
 
-  // Status check on app load (content page entry)
+  // Status check on content page load
   useEffect(() => {
     checkStatus();
   }, [checkStatus]);
@@ -83,11 +85,11 @@ export function AuthProvider({ children }) {
       setAccount(null);
       return null;
     }
-  }, [subid, productcode, setMsisdn]);
+  }, [subid, productcode]);
 
   const redirectToCampaign = useCallback(() => {
-    const id = subid || '0';
-    window.location.href = getCampaignUrl(id, productcode);
+    const url = getCampaignUrl(subid, productcode);
+    window.location.assign(url);
   }, [subid, productcode]);
 
   const unsubscribe = useCallback(async () => {
@@ -97,8 +99,11 @@ export function AuthProvider({ children }) {
   }, [subid, productcode, loadAccount]);
 
   const updateSubid = useCallback((newSubid) => {
-    const id = newSubid || '0';
-    setSubid(id);
+    setSubid(sanitizeSubid(newSubid));
+  }, []);
+
+  const setProductcode = useCallback((code) => {
+    setProductcodeState(sanitizeProductcode(code));
   }, []);
 
   return (
@@ -116,7 +121,7 @@ export function AuthProvider({ children }) {
       unsubscribe,
       updateSubid,
       setMsisdn,
-      setProductcode: setProductcode,
+      setProductcode,
     }}>
       {children}
     </AuthContext.Provider>
