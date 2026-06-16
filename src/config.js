@@ -25,8 +25,8 @@ export function sanitizeProductcode(productcode) {
 }
 
 /**
- * Normalize to API format: 2250575203579
- * Local input: 0575203579 (10 digits, starts with 0)
+ * Normalize to API format: 2250XXXXXXXXX (13 digits)
+ * Local input: 10 digits starting with 0
  */
 export function normalizeMsisdn(input) {
   let digits = String(input || '').replace(/\D/g, '');
@@ -61,7 +61,7 @@ export function isValidMsisdn(msisdn) {
 
 /**
  * Build API URL exactly as curl:
- * ?subid=0&productcode=RCRU&msisdn=2250575203579
+ * ?subid=0&productcode=RCRU&msisdn=2250XXXXXXXXX
  */
 export function buildApiUrl(path, subid, productcode = PRODUCT_CODE, msisdn = null) {
   const id = sanitizeSubid(subid);
