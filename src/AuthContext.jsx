@@ -29,6 +29,7 @@ function getInitialSession() {
   return {
     subid: urlSubid || saved?.subid || '0',
     productcode: urlProductcode || saved?.productcode || PRODUCT_CODE,
+    msisdn: saved?.msisdn || '',
   };
 }
 
@@ -38,13 +39,18 @@ export function AuthProvider({ children }) {
   const initial = getInitialSession();
   const [subid, setSubid] = useState(initial.subid);
   const [productcode, setProductcode] = useState(initial.productcode);
+  const [msisdn, setMsisdnState] = useState(initial.msisdn);
   const [isSubscribed, setIsSubscribed] = useState(null);
   const [account, setAccount] = useState(null);
   const [statusLoading, setStatusLoading] = useState(false);
 
   useEffect(() => {
-    saveSession({ subid, productcode });
-  }, [subid, productcode]);
+    saveSession({ subid, productcode, msisdn });
+  }, [subid, productcode, msisdn]);
+
+  const setMsisdn = useCallback((value) => {
+    setMsisdnState(value);
+  }, []);
 
   const checkStatus = useCallback(async () => {
     setStatusLoading(true);
@@ -61,7 +67,7 @@ export function AuthProvider({ children }) {
     }
   }, [subid, productcode]);
 
-  // Check subscription in background on load – no redirect
+  // Status check on app load (content page entry)
   useEffect(() => {
     checkStatus();
   }, [checkStatus]);
@@ -70,13 +76,14 @@ export function AuthProvider({ children }) {
     try {
       const data = await getAccountDetail(subid, productcode);
       setAccount(data);
+      if (data.msisdn) setMsisdnState(data.msisdn);
       setIsSubscribed(Number(data.status) === 1);
       return data;
     } catch {
       setAccount(null);
       return null;
     }
-  }, [subid, productcode]);
+  }, [subid, productcode, setMsisdn]);
 
   const redirectToCampaign = useCallback(() => {
     window.location.href = getCampaignUrl(subid, productcode);
@@ -91,13 +98,13 @@ export function AuthProvider({ children }) {
   const updateSubid = useCallback((newSubid) => {
     const id = newSubid || '0';
     setSubid(id);
-    saveSession({ subid: id, productcode });
-  }, [productcode]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{
       subid,
       productcode,
+      msisdn,
       isSubscribed,
       isLoggedIn: isSubscribed === true,
       account,
@@ -107,7 +114,8 @@ export function AuthProvider({ children }) {
       redirectToCampaign,
       unsubscribe,
       updateSubid,
-      setProductcode,
+      setMsisdn,
+      setProductcode: setProductcode,
     }}>
       {children}
     </AuthContext.Provider>

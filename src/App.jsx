@@ -13,10 +13,11 @@ import Community           from './pages/Community';
 import Support             from './pages/Support';
 import Contact             from './pages/Contact';
 import Login               from './pages/Login';
+import Register            from './pages/Register';
 import PlayGame            from './pages/PlayGame';
 import NotFound            from './pages/NotFound';
 
-const NO_CHROME = ['/login'];
+const NO_CHROME = ['/login', '/accounts/register'];
 
 function Layout() {
   const { pathname } = useLocation();
@@ -28,18 +29,19 @@ function Layout() {
       {!isFullScreen && <Navbar />}
       <main className={`h-full pb-0 flex-1 font-body${!isFullScreen ? ' mt-0 lg:mt-24' : ''}`}>
         <Routes>
-          <Route path="/"                element={<Home />} />
-          <Route path="/tournaments"     element={<Tournaments />} />
-          <Route path="/clashes"         element={<Clashes />} />
-          <Route path="/games"           element={<Games />} />
-          <Route path="/quickplay"       element={<QuickPlay />} />
-          <Route path="/rewards"         element={<Rewards />} />
-          <Route path="/community"       element={<Community />} />
-          <Route path="/support"         element={<Support />} />
-          <Route path="/contact"         element={<Contact />} />
-          <Route path="/login"           element={<Login />} />
-          <Route path="/play/:slug"      element={<SubscriptionGuard><PlayGame /></SubscriptionGuard>} />
-          <Route path="*"               element={<NotFound />} />
+          <Route path="/"                      element={<Home />} />
+          <Route path="/tournaments"           element={<Tournaments />} />
+          <Route path="/clashes"               element={<Clashes />} />
+          <Route path="/games"                 element={<Games />} />
+          <Route path="/quickplay"             element={<QuickPlay />} />
+          <Route path="/rewards"               element={<Rewards />} />
+          <Route path="/community"             element={<Community />} />
+          <Route path="/support"               element={<Support />} />
+          <Route path="/contact"               element={<Contact />} />
+          <Route path="/login"                 element={<Login />} />
+          <Route path="/accounts/register"     element={<Register />} />
+          <Route path="/play/:slug"            element={<SubscriptionGuard><PlayGame /></SubscriptionGuard>} />
+          <Route path="*"                      element={<NotFound />} />
         </Routes>
       </main>
       {!isFullScreen && <Footer />}

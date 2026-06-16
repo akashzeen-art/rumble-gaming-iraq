@@ -19,10 +19,15 @@ const ar = {
   login_backHome:    'العودة للرئيسية',
 
   // Subscribe Modal
-  sub_title:       'اشترك للعب',
-  sub_subtitle:    'يجب الاشتراك للوصول إلى الألعاب',
-  sub_btn:         'اشترك الآن',
-  sub_redirect:    'سيتم تحويلك لصفحة الاشتراك.',
+  sub_title:       'تسجيل الدخول للعب',
+  sub_subtitle:    'أدخل رقم هاتفك للوصول إلى الألعاب',
+  sub_mobileLabel: 'رقم الهاتف',
+  sub_placeholder: '0000000000',
+  sub_btn:         'العب الآن',
+  sub_loading:     'جارٍ التحقق...',
+  sub_redirect:    'لست مشتركاً؟ سيتم تحويلك للاشتراك.',
+  sub_error_short: 'يرجى إدخال رقم هاتف صحيح.',
+  sub_error_net:   'خطأ في الشبكة. حاول مرة أخرى.',
 
   // Profile / My Account
   profile_activated:   'تاريخ التفعيل',
