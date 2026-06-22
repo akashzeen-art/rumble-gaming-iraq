@@ -94,6 +94,8 @@ const fr = {
 
   play_now: 'Jouer',
 
+  banner_play_ludo: 'Jouer au Ludo',
+
   gameNames: frGameNames,
 
   footer_play:          'Jouer',

@@ -65,6 +65,9 @@
 /* ─── Sticky nav ─── */
 .sticky { position: fixed !important; top: 0; width: 100%; }
 .stickyContainer + #contentContainer { padding-top: 44px; }
+body.nav-is-sticky main {
+  padding-top: var(--navbar-height, 0px);
+}
 
 /* ─── Rainbow animation ─── */
 @keyframes color-change-2x {

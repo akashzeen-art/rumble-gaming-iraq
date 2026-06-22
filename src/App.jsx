@@ -20,7 +20,7 @@ function Layout() {
   return (
     <div className="w-full font-body relative m-0 min-h-full bg_site" id="body">
       {!isFullScreen && <Navbar />}
-      <main className={`h-full pb-0 flex-1 font-body${!isFullScreen ? ' mt-0 lg:mt-24' : ''}`}>
+      <main className="h-full pb-0 flex-1 font-body">
         <Routes>
           <Route path="/"                      element={<Home />} />
           <Route path="/tournaments"           element={<Navigate to="/" replace />} />

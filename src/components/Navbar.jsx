@@ -157,6 +157,27 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    document.body.classList.toggle('nav-is-sticky', isSticky);
+    return () => document.body.classList.remove('nav-is-sticky');
+  }, [isSticky]);
+
+  useEffect(() => {
+    const el = document.getElementById('stickyNavContainer');
+    if (!el) return;
+    const update = () => {
+      document.documentElement.style.setProperty('--navbar-height', `${el.offsetHeight}px`);
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    window.addEventListener('resize', update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  useEffect(() => {
     const handler = (e) => {
       if (langDropRef.current && !langDropRef.current.contains(e.target)) setLangOpen(false);
       if (langMobileDropRef.current && !langMobileDropRef.current.contains(e.target)) setLangMobileOpen(false);

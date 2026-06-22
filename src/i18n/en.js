@@ -92,6 +92,8 @@ const en = {
 
   play_now: 'Play Now',
 
+  banner_play_ludo: 'Play Ludo',
+
   gameNames: {},
 
   footer_play:          'Play',
