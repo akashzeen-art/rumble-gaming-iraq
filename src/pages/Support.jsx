@@ -6,7 +6,7 @@ const faqs = [
   { q: 'What is a Contest?', a: 'A Contest is a tournament where multiple players compete for the highest score. Winners earn Pods or prizes.' },
   { q: 'What is a Clash?', a: 'A Clash is a 1v1 PvP battle where you challenge another player directly.' },
   { q: 'How do I reset my password?', a: 'Click "Forgot Password" on the login page and follow the instructions sent to your email.' },
-  { q: 'Is Gamifya free to play?', a: 'Yes! Many games and contests are completely free. Some premium contests require Pods to enter.' },
+  { q: 'Is Rumble free to play?', a: 'Yes! Many games and contests are completely free. Some premium contests require Pods to enter.' },
 ];
 
 export default function Support() {

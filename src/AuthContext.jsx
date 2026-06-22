@@ -12,7 +12,7 @@ import {
   isValidMsisdn,
 } from './auth';
 
-const STORAGE_KEY = 'gamifya_session';
+const STORAGE_KEY = 'Rumble_session';
 
 function loadSession() {
   try {

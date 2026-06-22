@@ -8,7 +8,7 @@ export default function Contact() {
     <>
       <div className="page-hero">
         <h1 className="font-heading text-4xl lg:text-5xl font-black uppercase mb-2">Contact Us</h1>
-        <p className="font-body text-lg opacity-80">Get in touch with the Gamifya team</p>
+        <p className="font-body text-lg opacity-80">Get in touch with the Rumble team</p>
       </div>
       <div className="lg:container lg:px-4 lg:mx-auto px-3 py-8 max-w-2xl">
         <form onSubmit={e => e.preventDefault()} className="bg-white rounded-2xlg p-6 border-2 border_hue_1_start space-y-4">

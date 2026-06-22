@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import en from './en';
 import fr from './fr';
 
-const STORAGE_KEY = 'gamifya_lang';
+const STORAGE_KEY = 'Rumble_lang';
 const messages = { en, fr };
 
 const I18nContext = createContext(null);
