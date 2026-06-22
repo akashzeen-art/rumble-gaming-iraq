@@ -39,6 +39,8 @@ const en = {
   profile_subscribe:   'Subscribe',
   profile_unsubscribe: 'Unsubscribe',
 
+  home_all_games:     'All Games',
+  home_all_sub:       'Pick a game and start playing',
   home_newest:        'Newest Games',
   home_contests:      'Contests',
   home_contests_sub:  'Play | Compete | Redeem',

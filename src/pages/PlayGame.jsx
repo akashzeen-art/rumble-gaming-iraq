@@ -1,11 +1,13 @@
 import { useLocation, useParams, Link } from 'react-router-dom';
 import { gamesData } from '../gamesData';
+import { useTranslation } from '../i18n';
 
 function makeSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
 export default function PlayGame() {
+  const { gameName } = useTranslation();
   const { slug }   = useParams();
   const { state }  = useLocation();
 
@@ -31,7 +33,7 @@ export default function PlayGame() {
           <i className="fas fa-arrow-left font_hue_1_start text-lg"></i>
           <span className="font-heading font-bold font_main text-sm uppercase">Back</span>
         </Link>
-        <h1 className="font-heading font-black font_main uppercase text-base truncate mx-4">{game.name}</h1>
+        <h1 className="font-heading font-black font_main uppercase text-base truncate mx-4">{gameName(game.name)}</h1>
         <div className="flex gap-2">
           {game.categories.slice(0, 1).map(c => (
             <span key={c} className="badge-pill bg_hue_2_start hue_2_fontcol text-xs">{c}</span>
@@ -43,7 +45,7 @@ export default function PlayGame() {
       <div className="flex-1 bg-black" style={{ minHeight: 'calc(100vh - 44px)' }}>
         <iframe
           src={game.game_url}
-          title={game.name}
+          title={gameName(game.name)}
           className="w-full h-full border-0"
           style={{ minHeight: 'calc(100vh - 44px)' }}
           allow="fullscreen; autoplay"

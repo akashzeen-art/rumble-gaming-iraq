@@ -20,6 +20,8 @@ export function I18nProvider({ children }) {
 
   const t = messages[lang] || messages.en;
 
+  const gameName = useCallback((name) => t.gameNames?.[name] || name, [t]);
+
   const setLang = useCallback((code) => {
     const next = normalizeLang(code);
     setLangState(next);
@@ -32,7 +34,7 @@ export function I18nProvider({ children }) {
   }, [lang]);
 
   return (
-    <I18nContext.Provider value={{ lang, setLang, t }}>
+    <I18nContext.Provider value={{ lang, setLang, t, gameName }}>
       {children}
     </I18nContext.Provider>
   );

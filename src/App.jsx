@@ -1,16 +1,9 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import './index.css';
 import Navbar              from './components/Navbar';
 import Footer              from './components/Footer';
 import SubscriptionGuard   from './components/SubscriptionGuard';
 import Home                from './pages/Home';
-import Tournaments         from './pages/Tournaments';
-import Clashes             from './pages/Clashes';
-import Games               from './pages/Games';
-import QuickPlay           from './pages/QuickPlay';
-import Rewards             from './pages/Rewards';
-import Community           from './pages/Community';
-import Support             from './pages/Support';
 import Contact             from './pages/Contact';
 import Login               from './pages/Login';
 import Register            from './pages/Register';
@@ -30,13 +23,13 @@ function Layout() {
       <main className={`h-full pb-0 flex-1 font-body${!isFullScreen ? ' mt-0 lg:mt-24' : ''}`}>
         <Routes>
           <Route path="/"                      element={<Home />} />
-          <Route path="/tournaments"           element={<Tournaments />} />
-          <Route path="/clashes"               element={<Clashes />} />
-          <Route path="/games"                 element={<Games />} />
-          <Route path="/quickplay"             element={<QuickPlay />} />
-          <Route path="/rewards"               element={<Rewards />} />
-          <Route path="/community"             element={<Community />} />
-          <Route path="/support"               element={<Support />} />
+          <Route path="/tournaments"           element={<Navigate to="/" replace />} />
+          <Route path="/clashes"               element={<Navigate to="/" replace />} />
+          <Route path="/games"                 element={<Navigate to="/" replace />} />
+          <Route path="/quickplay"             element={<Navigate to="/" replace />} />
+          <Route path="/rewards"               element={<Navigate to="/" replace />} />
+          <Route path="/community"             element={<Navigate to="/" replace />} />
+          <Route path="/support"               element={<Navigate to="/" replace />} />
           <Route path="/contact"               element={<Contact />} />
           <Route path="/login"                 element={<Login />} />
           <Route path="/accounts/register"     element={<Register />} />

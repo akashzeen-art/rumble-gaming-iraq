@@ -15,13 +15,13 @@ export default function GameCard({
   textClass   = 'spot_fontcol',
   titleClass  = 'darklight_fontcol',
 }) {
-  const { t } = useTranslation();
+  const { t, gameName } = useTranslation();
   const { isSubscribed } = useAuth();
   const navigate         = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const slug        = makeSlug(game.name);
   const thumb       = game.thumbnail_url || game.img;
-  const displayName = t.gameNames[game.name] || game.name;
+  const displayName = gameName(game.name);
 
   const goToGame = () => navigate(`/play/${slug}`, { state: { game } });
 

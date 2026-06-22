@@ -1,3 +1,5 @@
+import frGameNames from './gameNames.fr';
+
 const fr = {
   nav_contests:    'Concours',
   nav_clashes:     'Duels',
@@ -39,6 +41,8 @@ const fr = {
   profile_subscribe:   'S\'abonner',
   profile_unsubscribe: 'Se désabonner',
 
+  home_all_games:     'Tous les Jeux',
+  home_all_sub:       'Choisissez un jeu et commencez à jouer',
   home_newest:        'Nouveaux Jeux',
   home_contests:      'Concours',
   home_contests_sub:  'Jouer | Compétir | Échanger',
@@ -90,7 +94,7 @@ const fr = {
 
   play_now: 'Jouer',
 
-  gameNames: {},
+  gameNames: frGameNames,
 
   footer_play:          'Jouer',
   footer_support:       'Support',
