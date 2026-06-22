@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import SubscribeModal from './SubscribeModal';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 function makeSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -15,6 +15,7 @@ export default function GameCard({
   textClass   = 'spot_fontcol',
   titleClass  = 'darklight_fontcol',
 }) {
+  const { t } = useTranslation();
   const { isSubscribed } = useAuth();
   const navigate         = useNavigate();
   const [showModal, setShowModal] = useState(false);

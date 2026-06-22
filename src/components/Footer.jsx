@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 export default function Footer() {
+  const { t } = useTranslation();
   const [playOpen,    setPlayOpen]    = useState(false);
   const [supportOpen, setSupportOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function Footer() {
       {t.footer_recaptcha}{' '}
       <br className="hidden md:block" />
       <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer" className="underline">{t.footer_privacy}</a>
-      {' '}و{' '}
+      {' '}{t.footer_and}{' '}
       <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer" className="underline">{t.footer_terms}</a>
       {' '}{t.footer_recaptcha_end}
     </>

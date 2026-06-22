@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import SubscribeModal from '../components/SubscribeModal';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 export default function Register() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const { updateSubid, setProductcode } = useAuth();
   const [showModal, setShowModal] = useState(false);

@@ -1,10 +1,11 @@
 import GameCard from '../components/GameCard';
 import { gamesData } from '../gamesData';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 const games = gamesData.filter(g => g.categories.includes('Easy to Play'));
 
 export default function QuickPlay() {
+  const { t } = useTranslation();
   return (
     <>
       <div className="page-hero">

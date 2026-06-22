@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import GameCard from '../components/GameCard';
 import { gamesData } from '../gamesData';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 const games = gamesData.slice(0, 10);
 
 export default function Clashes() {
+  const { t } = useTranslation();
   return (
     <>
       <div className="page-hero">

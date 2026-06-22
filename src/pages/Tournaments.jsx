@@ -1,16 +1,7 @@
 import { useState } from 'react';
 import GameCard from '../components/GameCard';
 import { gamesData } from '../gamesData';
-import t from '../i18n/ar';
-
-const CATS = [
-  { key: 'All',          label: t.filter_all },
-  { key: 'Arcade',       label: t.filter_arcade },
-  { key: 'Puzzle',       label: t.filter_puzzle },
-  { key: 'Action',       label: t.filter_action },
-  { key: 'Easy to Play', label: t.filter_easy },
-  { key: 'Top 10',       label: t.filter_top10 },
-];
+import { useTranslation } from '../i18n';
 
 const tournamentGames = [
   { name: 'Milk For Cat',      game_url: 'https://cdn.timepass.games/games/6ebe7cf6-cfec-4853-af8e-f2dabfb485e4/ef2d4959-a3e0-462a-a560-9317703d77b7/', thumbnail_url: 'https://cdn.timepass.games/images/9d29f79f-027f-46db-a7a4-f0712dbe6268.webp',          categories: ['All Games'] },
@@ -43,7 +34,17 @@ const allTournamentGames = tournamentGames.filter(g => {
 });
 
 export default function Tournaments() {
+  const { t } = useTranslation();
   const [activeFilter, setActiveFilter] = useState('All');
+
+  const CATS = [
+    { key: 'All',          label: t.filter_all },
+    { key: 'Arcade',       label: t.filter_arcade },
+    { key: 'Puzzle',       label: t.filter_puzzle },
+    { key: 'Action',       label: t.filter_action },
+    { key: 'Easy to Play', label: t.filter_easy },
+    { key: 'Top 10',       label: t.filter_top10 },
+  ];
 
   const filtered = activeFilter === 'All'
     ? allTournamentGames

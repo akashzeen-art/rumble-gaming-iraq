@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PODS_IMG } from '../data';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 const rewards = [
   { id: 1, name: 'R50 Voucher',  cost: 500,  img: PODS_IMG, category: 'Vouchers' },
@@ -11,9 +11,10 @@ const rewards = [
   { id: 6, name: 'Data 1GB',     cost: 600,  img: PODS_IMG, category: 'Data' },
 ];
 
-const catLabels = { Vouchers: t.cat_vouchers, Airtime: t.cat_airtime, Data: t.cat_data };
-
 export default function Rewards() {
+  const { t } = useTranslation();
+  const catLabels = { Vouchers: t.cat_vouchers, Airtime: t.cat_airtime, Data: t.cat_data };
+
   return (
     <>
       <div className="page-hero">

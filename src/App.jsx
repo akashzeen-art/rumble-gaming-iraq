@@ -25,7 +25,7 @@ function Layout() {
   const isFullScreen = NO_CHROME.includes(pathname) || isPlay;
 
   return (
-    <div className="w-full font-body relative m-0 min-h-full bg_site" style={{ direction: 'rtl' }} id="body">
+    <div className="w-full font-body relative m-0 min-h-full bg_site" id="body">
       {!isFullScreen && <Navbar />}
       <main className={`h-full pb-0 flex-1 font-body${!isFullScreen ? ' mt-0 lg:mt-24' : ''}`}>
         <Routes>

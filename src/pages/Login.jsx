@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import SubscribeModal from '../components/SubscribeModal';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 export default function Login() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 

@@ -3,9 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { languages, PODS_IMG } from '../data';
 import { useAuth } from '../AuthContext';
 import SubscribeModal from './SubscribeModal';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 function AccountPanel({ onClose }) {
+  const { t } = useTranslation();
   const { account, loadAccount, unsubscribe } = useAuth();
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -47,7 +48,7 @@ function AccountPanel({ onClose }) {
       position: 'fixed', inset: 0, zIndex: 999,
       background: 'rgba(0,0,0,0.6)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '1rem', direction: 'rtl',
+      padding: '1rem',
     }} onClick={onClose}>
       <div style={{
         background: '#fff', borderRadius: '1.2rem', width: '100%', maxWidth: '380px',
@@ -121,6 +122,7 @@ function AccountPanel({ onClose }) {
 }
 
 export default function Navbar() {
+  const { t, lang, setLang } = useTranslation();
   const [menuOpen,       setMenuOpen]       = useState(false);
   const [langOpen,       setLangOpen]       = useState(false);
   const [langMobileOpen, setLangMobileOpen] = useState(false);
@@ -128,7 +130,6 @@ export default function Navbar() {
   const [searchOpen,     setSearchOpen]     = useState(false);
   const [searchVal,      setSearchVal]      = useState('');
   const [isSticky,       setIsSticky]       = useState(false);
-  const [activeLang,     setActiveLang]     = useState(() => localStorage.getItem('gamifya_lang') || 'ar');
 
   const langDropRef       = useRef(null);
   const langMobileDropRef = useRef(null);
@@ -161,14 +162,11 @@ export default function Navbar() {
   }, []);
 
   const handleLangChange = (code) => {
-    setActiveLang(code);
-    localStorage.setItem('gamifya_lang', code);
+    setLang(code);
     setLangOpen(false); setLangMobileOpen(false);
-    document.documentElement.dir = ['ar', 'fa', 'he'].includes(code) ? 'rtl' : 'ltr';
-    document.documentElement.lang = code;
   };
 
-  const currentLang = languages.find(l => l.code === activeLang) || languages.find(l => l.active);
+  const currentLang = languages.find(l => l.code === lang) || languages.find(l => l.active);
   const doSearch = (val) => { if (val.length >= 3) { navigate('/games'); setSearchOpen(false); setSearchVal(''); } };
 
   const navLinks = [
@@ -180,7 +178,7 @@ export default function Navbar() {
   ];
 
   const mobileRows = [
-    [{ to: '/', icon: 'fa-home', label: 'الرئيسية', col: 'font_hue_1_start' }, { to: '/support', icon: 'fa-question-circle', label: 'المساعدة', col: 'font_hue_4_start' }],
+    [{ to: '/', icon: 'fa-home', label: t.nav_home, col: 'font_hue_1_start' }, { to: '/support', icon: 'fa-question-circle', label: t.nav_help, col: 'font_hue_4_start' }],
     [{ to: '/tournaments', icon: 'fa-trophy', label: t.nav_contests, col: 'font_hue_4_start' }, { to: '/clashes', icon: 'fa-user-friends', label: t.nav_clashes, col: 'font_hue_4_start' }],
     [{ to: '/games', icon: 'fa-play', label: t.nav_questGames, col: 'font_hue_4_start' }, { to: '/quickplay', icon: 'fa-play-circle', label: t.nav_quickplay, col: 'font_hue_4_start' }],
     [{ to: '/rewards', icon: 'fa-money-bill-alt', label: t.nav_rewards, col: 'font_hue_4_start' }],
@@ -193,8 +191,8 @@ export default function Navbar() {
         <li key={l.code}>
           <div onClick={() => handleLangChange(l.code)}
             className="cursor-pointer py-1 px-2 rounded transition-colors"
-            style={{ fontSize: '0.875rem', color: activeLang === l.code ? '#00c5eb' : '#00122d', fontWeight: activeLang === l.code ? 900 : 400, display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {activeLang === l.code && <i className="fas fa-check" style={{ fontSize: '0.65rem', color: '#00c5eb' }}></i>}
+            style={{ fontSize: '0.875rem', color: lang === l.code ? '#00c5eb' : '#00122d', fontWeight: lang === l.code ? 900 : 400, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {lang === l.code && <i className="fas fa-check" style={{ fontSize: '0.65rem', color: '#00c5eb' }}></i>}
             {l.label}
           </div>
         </li>
@@ -248,7 +246,7 @@ export default function Navbar() {
               style={{ background: 'none', border: 'none', padding: '4px 6px', borderRadius: '6px' }}
               title={`Language: ${currentLang?.label}`}>
               <i className="fas fa-globe-americas font_main" style={{ fontSize: '1.4rem' }}></i>
-              <span className="font_main font-heading font-bold uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.05em' }}>{activeLang.toUpperCase()}</span>
+              <span className="font_main font-heading font-bold uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.05em' }}>{lang.toUpperCase()}</span>
               <i className={`fas fa-chevron-${langOpen ? 'up' : 'down'} font_main`} style={{ fontSize: '0.6rem' }}></i>
             </button>
             {langOpen && (
@@ -307,7 +305,7 @@ export default function Navbar() {
                       style={{ background: 'none', border: 'none', padding: '4px 6px' }}
                       title={`Language: ${currentLang?.label}`}>
                       <i className="fas fa-globe-americas font_hue_4_start" style={{ fontSize: '1.4rem' }}></i>
-                      <span className="font_hue_4_start font-heading font-bold uppercase" style={{ fontSize: '0.65rem' }}>{activeLang.toUpperCase()}</span>
+                      <span className="font_hue_4_start font-heading font-bold uppercase" style={{ fontSize: '0.65rem' }}>{lang.toUpperCase()}</span>
                     </button>
                     {langMobileOpen && (
                       <div style={{ position: 'absolute', top: '100%', left: 0, marginTop: '4px', background: '#fff', border: '2px solid #008aaa', borderRadius: '0.5rem', maxHeight: '12rem', overflowY: 'scroll', padding: '0.75rem', boxShadow: '0 10px 25px rgba(0,0,0,0.15)', zIndex: 60 }}>

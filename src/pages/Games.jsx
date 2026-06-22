@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import GameCard from '../components/GameCard';
 import { gamesData } from '../gamesData';
-import t from '../i18n/ar';
-
-const CATS = [
-  { key: 'All Games',    label: t.cat_all },
-  { key: 'Easy to Play', label: t.cat_easy },
-  { key: 'Puzzle',       label: t.cat_puzzle },
-  { key: 'Action',       label: t.cat_action },
-  { key: 'Arcade',       label: t.cat_arcade },
-  { key: 'Top 10 Games', label: t.cat_top10 },
-];
+import { useTranslation } from '../i18n';
 
 export default function Games() {
+  const { t } = useTranslation();
   const [active, setActive] = useState('All Games');
+
+  const CATS = [
+    { key: 'All Games',    label: t.cat_all },
+    { key: 'Easy to Play', label: t.cat_easy },
+    { key: 'Puzzle',       label: t.cat_puzzle },
+    { key: 'Action',       label: t.cat_action },
+    { key: 'Arcade',       label: t.cat_arcade },
+    { key: 'Top 10 Games', label: t.cat_top10 },
+  ];
+
   const filtered = gamesData.filter(g => g.categories.includes(active));
 
   return (
@@ -23,7 +25,6 @@ export default function Games() {
         <p className="font-body text-lg opacity-80">{t.games_sub}</p>
       </div>
 
-      {/* Category filter */}
       <div className="bg_hue_4_start py-3 px-4 sticky top-0 z-40">
         <div className="lg:container lg:mx-auto flex flex-wrap gap-2 justify-center">
           {CATS.map(c => (

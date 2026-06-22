@@ -4,7 +4,7 @@ import PromoBanner from '../components/PromoBanner';
 import GameCard from '../components/GameCard';
 import XpModal from '../components/XpModal';
 import { newestGames } from '../data';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 // ── QuickPlay section games (unique) ─────────────────────────────────────
 const quickPlayGames = [
@@ -49,6 +49,7 @@ function SectionDivider({ showArrow = true, mb = 'mb-6' }) {
 }
 
 export default function Home() {
+  const { t } = useTranslation();
   const [xpOpen, setXpOpen] = useState(false);
 
   return (

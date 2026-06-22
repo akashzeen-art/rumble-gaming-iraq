@@ -37,20 +37,8 @@ export const contests = [
 ];
 
 export const languages = [
-  { code: 'ar', label: 'عربى' }, { code: 'cy', label: 'Cymraeg' },
-  { code: 'de', label: 'Deutsche' }, { code: 'en', label: 'English', active: true },
-  { code: 'es', label: 'Español (mexico)' }, { code: 'fa', label: 'فارسی' },
-  { code: 'fr', label: 'Français' }, { code: 'ga', label: 'Gaeilge' },
-  { code: 'hi', label: 'हिंदी' }, { code: 'id', label: 'Bahasa Indonesia' },
-  { code: 'it', label: 'Italiano' }, { code: 'kk', label: 'Қазақ' },
-  { code: 'ko', label: '한국어' }, { code: 'ms', label: 'Bahasa Melayu' },
-  { code: 'nl', label: 'Nederlands' }, { code: 'no', label: 'Norsk' },
-  { code: 'pa', label: 'ਪੰਜਾਬੀ' }, { code: 'pl', label: 'Polskie' },
-  { code: 'pt', label: 'Português' }, { code: 'si', label: 'සිංහල' },
-  { code: 'so', label: 'Soomaali' }, { code: 'sw', label: 'Kiswahili' },
-  { code: 'th', label: 'ไทย' }, { code: 'tl', label: 'Tagalog' },
-  { code: 'tr', label: 'Türk' }, { code: 'vi', label: 'Tiếng Việt' },
-  { code: 'zh', label: '简体中文）' },
+  { code: 'en', label: 'English', active: true },
+  { code: 'fr', label: 'Français' },
 ];
 
 export const PODS_IMG      = 'https://gamifya.com/storage/default/ibTwpivcn3tLHbvG1wSj5gOwVxYjW1u6SNG3JyRv.png';

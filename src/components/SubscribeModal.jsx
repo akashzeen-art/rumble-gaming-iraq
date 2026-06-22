@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { COUNTRY_CODE, normalizeMsisdn } from '../config';
 import { useAuth } from '../AuthContext';
-import t from '../i18n/ar';
+import { useTranslation } from '../i18n';
 
 function cleanLocalInput(value) {
   let digits = value.replace(/\D/g, '');
@@ -12,6 +12,7 @@ function cleanLocalInput(value) {
 }
 
 export default function SubscribeModal({ onClose, onSuccess }) {
+  const { t } = useTranslation();
   const [mobile, setMobile] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ export default function SubscribeModal({ onClose, onSuccess }) {
 
   return (
     <div
-      style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', direction: 'rtl' }}
+      style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}
       onClick={onClose}
     >
       <div
